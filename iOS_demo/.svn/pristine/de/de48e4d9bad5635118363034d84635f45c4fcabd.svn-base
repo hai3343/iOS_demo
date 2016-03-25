@@ -1,0 +1,317 @@
+//
+//  ScreenLabView.m
+//  iOS_demo
+//
+//  Created by 金中国 on 16/3/16.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "ScreenLabView.h"
+
+@interface ScreenLabView()<UITextFieldDelegate>
+{
+    CGFloat height;             //记录 折叠与展开位置
+    NSMutableArray *butTitleAry;//记录 所选 款式
+    UIImageView *imageView;     //箭头
+}
+@property (nonatomic, strong)UIScrollView *backScroll;
+
+@property (nonatomic, assign)BOOL          touchup;
+
+@end
+@implementation ScreenLabView
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+ */
+//- (void)drawRect:(CGRect)rect {
+//    // Drawing code
+//}
+
+- (instancetype)initWithFrame:(CGRect)frame andDataAry:(NSArray *)dataAry{
+    self = [super initWithFrame:frame];
+    if (self) {
+        butTitleAry = [[NSMutableArray alloc]init];
+        [self layoutViewDataAry:dataAry];
+        self.backgroundColor = [UIColor colorWithWhite:0.902 alpha:0.6];
+    }
+    return self;
+}
+
+- (void)dissMissBarkey{
+    [[UIApplication sharedApplication].keyWindow endEditing:YES];
+}
+- (void)layoutViewDataAry:(NSArray *)dataAry{
+    
+    UIView *backview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width - 50, self.height)];
+    backview.backgroundColor = [UIColor whiteColor];
+    [self addSubview:backview];
+    
+    UIButton *disButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    disButton.frame = CGRectMake(10, 10, 40, 30);
+    disButton.backgroundColor = [UIColor redColor];
+    [disButton setTitle:@"取消" forState:UIControlStateNormal];
+    [disButton addTarget:self action:@selector(dissMiss) forControlEvents:UIControlEventTouchUpInside];
+    [backview addSubview:disButton];
+    
+    UIButton *ascertainBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    ascertainBtn.frame = CGRectMake(backview.width - 50, 10, 40, 30);
+    ascertainBtn.backgroundColor = [UIColor redColor];
+    [ascertainBtn setTitle:@"确定" forState:UIControlStateNormal];
+    [ascertainBtn addTarget:self action:@selector(ascertain) forControlEvents:UIControlEventTouchUpInside];
+    [backview addSubview:ascertainBtn];
+
+    _backScroll = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 50, self.width - 50, self.height - 50)];
+    _backScroll.backgroundColor = [UIColor whiteColor];
+    [backview addSubview:_backScroll];
+    
+    UITapGestureRecognizer *zer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dissMissBarkey)];
+    [_backScroll addGestureRecognizer:zer];
+    
+    for (NSInteger index = 0; index < dataAry.count; index++) {
+        NSArray *viewAry = [dataAry objectAtIndex:index];
+        UIView *backView = [[UIView alloc]init];
+        backView.tag = 1000 * (index + 1);
+        backView.backgroundColor = [UIColor whiteColor];
+        CGFloat min_x = 5;
+        CGFloat min_y = 35;
+        CGFloat max_when = self.width - 50 - 10;
+        
+        if (index == 0) {
+            UIButton *foldBut = [UIButton buttonWithType:UIButtonTypeCustom];
+            foldBut.frame = CGRectMake(5, 0, max_when, 30);
+            foldBut.tag = 1005;
+            foldBut.titleLabel.font = [UIFont systemFontOfSize:15];
+            [foldBut setTitle:@"款式" forState:UIControlStateNormal];
+            [foldBut setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+
+            imageView = [[UIImageView alloc]initWithFrame:CGRectMake(max_when - 20, 10, 10, 10)];
+            imageView.image = [UIImage imageNamed:@"iconfont-ODWN"];
+            [foldBut addSubview:imageView];
+            
+            foldBut.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            foldBut.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+            [foldBut addTarget:self action:@selector(viewFold:) forControlEvents:UIControlEventTouchUpInside];
+            [backView addSubview:foldBut];
+        }
+        else if (index == 1){
+            UILabel *priceLab = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, max_when, 30)];
+            priceLab.text = @"        价格区间";
+            priceLab.font = [UIFont systemFontOfSize:15];
+            priceLab.textColor = [UIColor grayColor];
+            [backView addSubview:priceLab];
+            
+            UITextField *fieldLeft = [[UITextField alloc]initWithFrame:CGRectMake(5, 40, 80, 30)];
+            fieldLeft.tag = 2005;
+            fieldLeft.keyboardType = UIKeyboardTypeNumberPad;
+            fieldLeft.delegate = self;
+            fieldLeft.textColor = [UIColor grayColor];
+            fieldLeft.font = [UIFont systemFontOfSize:15];
+            fieldLeft.layer.masksToBounds = YES;
+            fieldLeft.layer.cornerRadius  = 5;
+            fieldLeft.layer.borderColor   = [UIColor grayColor].CGColor;
+            fieldLeft.layer.borderWidth   = 1;
+            fieldLeft.textAlignment       = NSTextAlignmentCenter;
+            [backView addSubview:fieldLeft];
+            
+            UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(95, 53, 10, 1)];
+            lineView.backgroundColor = [UIColor blackColor];
+            [backView addSubview:lineView];
+            
+            UITextField *fieldRight = [[UITextField alloc]initWithFrame:CGRectMake(120,40, 80, 30)];
+            fieldRight.tag = 2006;
+            fieldRight.keyboardType = UIKeyboardTypeNumberPad;
+            fieldRight.delegate = self;
+            fieldRight.textColor = [UIColor grayColor];
+            fieldRight.layer.masksToBounds = YES;
+            fieldRight.layer.cornerRadius  = 5;
+            fieldRight.font = [UIFont systemFontOfSize:15];
+            fieldRight.layer.borderColor   = [UIColor grayColor].CGColor;
+            fieldRight.layer.borderWidth   = 1;
+            fieldRight.textAlignment       = NSTextAlignmentCenter;
+            [backView addSubview:fieldRight];
+            
+            min_y = 75;
+        }
+        
+        
+        for (NSInteger indexes = 0; indexes < viewAry.count; indexes++) {
+            ScreenModel *model = [viewAry objectAtIndex:indexes];
+            //通过返回的对象 的fram 来计算 是否需要换行
+
+            UIButton * button = [model returnViewXposition:min_x andYposition:min_y];
+            button.tag = backView.tag + 10 + indexes;
+            
+            [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+            
+            min_x = button.X + button.width + 5;
+            if (button.width + button.X + 5 >= max_when) {
+                CGRect fram = button.frame;
+                fram.origin.x = 5;
+                fram.origin.y = button.Y + 30 + 5;
+                button.frame = fram;
+                
+                min_y = fram.origin.y;
+                min_x = fram.origin.x + fram.size.width + 5;
+            }
+            if (button.width + button.X + 5 > max_when) {
+                CGRect fram = button.frame;
+                fram.size.height = 60;
+                fram.size.width =max_when;
+                button.frame = fram;
+                
+                min_y = button.Y + button.height + 5;
+                min_x = 5;
+            }
+            if (model.founth == VIEW_FUNCTION_COLOR) {
+                [button addTarget:self action:@selector(pleaseChangeColors:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if (model.founth == VIEW_FUNCTION_TEXTFIELD){
+                [button addTarget:self action:@selector(refreshPriceText:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            
+            [backView addSubview:button];
+        }
+        if (index == 0) {
+            height = min_y + 30;
+            backView.frame = CGRectMake(0, 0, max_when, height);
+        }
+        else if (index == 1){
+            backView.frame = CGRectMake(0, height + 5, max_when, min_y + 30);
+        }
+        [self.backScroll addSubview:backView];
+        
+        
+    }
+}
+/**
+ *  textfield 代理，只要一输入，就讲价格按钮置为 灰色
+ */
+- (BOOL)textField:(UITextField*)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    [self pleaseChangeColor];
+    return YES;
+}
+/**
+ *  全部按钮 置为 灰色
+ */
+- (void)pleaseChangeColor{
+    UIView *backView = (UIView *)[self.backScroll viewWithTag:2000];
+    for (UIView *views in backView.subviews) {
+        if ([views isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)views;
+            button.selected = NO;
+        }
+    }
+}
+
+/**
+ *  按钮 文字 付给 textfield
+ */
+- (void)refreshPriceText:(UIButton *)sender{
+    UIView *backView = (UIView *)[self.backScroll viewWithTag:2000];
+    UITextField *fieldLeft = (UITextField *)[backView viewWithTag:2005];
+    UITextField *fieldRight = (UITextField *)[backView viewWithTag:2006];
+    
+    NSString *prict = [sender titleForState:UIControlStateNormal];
+    if ([prict hasSuffix:@"以上"]) {
+        NSArray *prictAry = [prict componentsSeparatedByString:@"以上"];
+        fieldLeft.text = [prictAry objectAtIndex:0];
+    }
+    else{
+        NSArray *prictAry = [prict componentsSeparatedByString:@"-"];
+        fieldLeft.text = [prictAry objectAtIndex:0];
+        fieldRight.text = [prictAry objectAtIndex:1];
+    }
+    [self pleaseChangeColor];
+    sender.selected = YES;
+}
+/**
+    点击 改变颜色
+ */
+- (void)pleaseChangeColors:(UIButton *)sender{
+    sender.selected = !sender.selected;
+    if (sender.selected == YES) {
+        sender.layer.borderColor = [UIColor redColor].CGColor;
+        [butTitleAry addObject:[sender titleForState:UIControlStateNormal]];
+    }
+    else{
+        [butTitleAry removeObject:[sender titleForState:UIControlStateNormal]];
+        sender.layer.borderColor = [UIColor grayColor].CGColor;
+    }
+}
+
+/**
+ *  展开 ／ 折叠
+ */
+- (void)viewFold:(UIButton *)sender{
+    
+    UIView *backView = (UIView *)[self.backScroll viewWithTag:1000];
+    UIView *numView  = (UIView *)[self.backScroll viewWithTag:2000];
+    if (self.touchup == YES) {
+        self.touchup = NO;
+        //展开
+        
+        [UIView beginAnimations:@"myAnimation" context:nil];
+        [UIView setAnimationDelay:0.5];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        
+        CGRect fram = backView.frame;
+        fram.size.height = height ;
+        backView.frame = fram;
+        
+        fram = numView.frame;
+        fram.origin.y = backView.frame.size.height + backView.frame.origin.y + 10;
+        numView.frame = fram;
+        
+        imageView.transform = CGAffineTransformMakeRotation(2 * M_PI);
+        [UIView commitAnimations];
+        
+    }
+    else{
+        self.touchup = YES;
+        //折叠
+        //http://www.cnblogs.com/hanjun/archive/2012/10/29/2745437.html 动画
+        [UIView beginAnimations:@"myAnimation" context:nil];
+        [UIView setAnimationDelay:0.5];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        CGRect fram = backView.frame;
+        fram.size.height = 30 - 5;
+        backView.frame = fram;
+        
+        fram = numView.frame;
+        fram.origin.y = backView.frame.size.height + backView.frame.origin.y + 10;
+        numView.frame = fram;
+        
+        imageView.transform = CGAffineTransformMakeRotation(M_PI);
+        [UIView commitAnimations];
+    }
+    
+   
+    
+}
+
+- (void)ascertain{
+    UIView *backView = (UIView *)[self.backScroll viewWithTag:2000];
+    UITextField *fieldLeft = (UITextField *)[backView viewWithTag:2005];
+    UITextField *fieldRight = (UITextField *)[backView viewWithTag:2006];
+    NSArray *prickAry = @[fieldLeft.text,fieldRight.text];
+    if ([_delegate respondsToSelector:@selector(returnSelectedCondition:)]) {
+        [_delegate returnSelectedCondition:@[butTitleAry,prickAry]];//返回当前选择
+    }
+    [self dissMiss];
+}
+
+- (void)dissMiss{
+//    CATransition *animation = [CATransition animation];
+//    animation.duration = 1;
+//    animation.timingFunction = UIViewAnimationCurveEaseInOut;
+//    animation.fillMode = kCAFillModeForwards;
+//    animation.type = kCATransitionPush;
+//    animation.subtype = kCATransitionFromLeft;
+//    [self.superview.layer addAnimation:animation forKey:@"animationes"];
+    [self removeFromSuperview];
+}
+
+@end

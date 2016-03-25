@@ -1,0 +1,61 @@
+//
+//  UIView+HBExtension.h
+//  HBExtension
+//
+//  Created by yik on 16/1/9.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface UIView (HBExtension)
+/****坐标x****/
+@property (nonatomic,assign) CGFloat X;
+/****坐标y****/
+@property (nonatomic,assign) CGFloat Y;
+///*****X + self宽度 右边界距左边距离********/
+//@property (nonatomic,assign) CGFloat left;
+///*****y + self高度 上边界距上边距离********/
+//@property (nonatomic,assign) CGFloat top;
+/****self宽度****/
+@property (nonatomic,assign) CGFloat width;
+/****self高度****/
+@property (nonatomic,assign) CGFloat height;
+/****坐标(x,y)****/
+@property (nonatomic,assign) CGPoint point;
+/****self(宽,高)****/
+@property (nonatomic,assign) CGSize size;
+/****中心x****/
+@property (nonatomic,assign) CGFloat centerX;
+/****中心y****/
+@property (nonatomic,assign) CGFloat centerY;
+/******X + self.with*******/
+@property (nonatomic,assign) CGFloat maxX;
+/******Y + self.height*******/
+@property (nonatomic,assign) CGFloat maxY;
+/****圆角***/
+@property (nonatomic,assign) CGFloat cornerRadius;
+
+
+- (void)removeSubviews;
+- (void)bringToFront;
+- (void)sendToBack;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@end
+

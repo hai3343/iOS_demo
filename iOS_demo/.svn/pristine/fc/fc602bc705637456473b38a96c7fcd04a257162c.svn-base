@@ -1,0 +1,203 @@
+//
+//  ChangPass.m
+//  iOS_demo
+//
+//  Created by yik on 16/3/21.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+#define labTextColor [UIColor grayColor]
+#define labFont [UIFont systemFontOfSize:18]
+
+#import "ChangPass.h"
+@interface ChangPass()
+/****/
+@property (nonatomic,strong) UITextField *cellPhoneField;
+@property (nonatomic,strong) UITextField *verficodeField;
+@property (nonatomic,strong) UITextField *passWordField;
+@property (nonatomic,strong) UIButton *getCodeBtn;
+@property (nonatomic,strong) UILabel *phoneLab;
+@property (nonatomic,strong) UILabel *codeLab;
+@property (nonatomic,strong) UILabel *passwLab;
+@property (nonatomic,strong) UIButton *regisBtn;
+
+@end
+@implementation ChangPass
+CGFloat lableft = 20;
+CGFloat labWith = 80;
+CGFloat labHeight = 40;
+CGFloat textleft = 100;
+CGFloat textHeight = 45;
+CGFloat textRight = -20;
+CGFloat textTop = 20;
+CGFloat textOfset = 10;
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self createUI];
+        
+    }
+    return self;
+}
+- (void)layoutSubviews
+{
+    
+    [self.verficodeField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.cellPhoneField.mas_bottom).offset(textOfset);
+        make.left.mas_equalTo(self).offset(textleft);
+        make.height.mas_equalTo(textHeight);
+        make.right.mas_equalTo(self.cellPhoneField.mas_centerX).offset(-4);
+    }];
+    [self.getCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(textRight);
+        make.top.mas_equalTo(self.verficodeField);
+        make.height.mas_equalTo(textHeight);
+        make.width.mas_equalTo(self.verficodeField);
+    }];
+    [self.passWordField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.verficodeField.mas_bottom).offset(textOfset);
+        make.left.mas_equalTo(self).offset(textleft);
+        make.height.mas_equalTo(textHeight);
+        make.right.mas_equalTo(self).offset(textRight);
+    }];
+    
+    
+    
+    [_codeLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self).offset(lableft);
+        make.centerY.mas_equalTo(self.verficodeField);
+        make.size.mas_equalTo(CGSizeMake(labWith, labHeight));
+    }];
+    [_passwLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self).offset(lableft);
+        make.centerY.mas_equalTo(self.passWordField);
+        make.size.mas_equalTo(CGSizeMake(labWith, labHeight));
+    }];
+    
+    [_regisBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(_passWordField.mas_bottom).offset(30);
+        make.left.mas_equalTo(60);
+        make.right.mas_equalTo(-60);
+        make.height.mas_equalTo(textHeight);
+    }];
+    
+}
+- (void)createUI
+{
+    
+    self.cellPhoneField = [[UITextField alloc]init];
+    [self textFild:self.cellPhoneField text:@"请输入手机号"];
+    self.cellPhoneField.tag =  101;
+    [self addSubview:self.cellPhoneField];
+    [self.cellPhoneField addTarget:self action:@selector(tapCodeBtn:) forControlEvents:UIControlEventEditingChanged];
+    [self.cellPhoneField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self).offset(textOfset+textHeight+textTop);
+        make.left.mas_equalTo(self).offset(textleft);
+        make.height.mas_equalTo(textHeight);
+        make.right.mas_equalTo(self).offset(textRight);
+    }];
+    self.verficodeField = [[UITextField alloc]init];
+    [self textFild:self.verficodeField text:@"请输入验证码"];
+    [self addSubview:self.verficodeField];
+    
+    self.passWordField = [[UITextField alloc]init];
+    [self textFild:self.passWordField text:@"请设置账号密码"];
+    [self addSubview:self.passWordField];
+    
+    
+    //button
+    self.getCodeBtn = [UIButton buttonWithType:UIButtonTypeCustom title:@"获取验证码" titleFont:18 titleColor:RGB(233, 233, 233) backgroundColor:[UIColor whiteColor] target:self selector:@selector(getCode:)];
+    self.getCodeBtn.enabled = NO;
+    self.getCodeBtn.cornerRadius = 5;
+    [_getCodeBtn setBackgroundImage:[UIImage imageNamed:@"nav_icon_bg"] forState:UIControlStateSelected];
+    [self addSubview:self.getCodeBtn];
+    
+    
+    
+    
+    _phoneLab = [UILabel lableWithTitle:@"手机号:" titleColor:labTextColor titleFont:labFont textAlignment:NSTextAlignmentLeft];
+    [self addSubview:_phoneLab];
+    [_phoneLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self).offset(lableft);
+        make.centerY.mas_equalTo(self.cellPhoneField);
+        make.size.mas_equalTo(CGSizeMake(labWith, labHeight));
+    }];
+    
+    _codeLab = [UILabel lableWithTitle:@"验证码:" titleColor:labTextColor titleFont:labFont textAlignment:NSTextAlignmentLeft];
+    [self addSubview:_codeLab];
+    
+    
+    _passwLab = [UILabel lableWithTitle:@"密码:" titleColor:labTextColor titleFont:labFont textAlignment:NSTextAlignmentLeft];
+    [self addSubview:_passwLab];
+    
+    
+    _regisBtn = [UIButton buttonWithType:UIButtonTypeCustom title:@"注册" titleFont:18 titleColor:labTextColor backgroundColor:[UIColor whiteColor] target:self selector:@selector(regisBtn:)];;
+    _regisBtn.cornerRadius = 5;
+    _regisBtn.enabled = NO;
+    [_regisBtn setBackgroundImage:[UIImage imageNamed:@"nav_icon_bg"] forState:UIControlStateSelected];
+    
+    [self addSubview:_regisBtn];
+    
+    
+    UIImageView *footimage = [UIImageView imageViewWithImage:[UIImage imageNamed:@"footerlogo"]];
+    [self addSubview:footimage];
+    [footimage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(self);
+        make.top.mas_equalTo(_regisBtn.mas_bottom).offset(60);
+        make.height.mas_equalTo(50);
+    }];
+}
+
+- (void)textFild:(UITextField*)textFild text:(NSString*)text
+{
+    textFild.placeholder = text;
+    textFild.borderStyle = UITextBorderStyleRoundedRect;
+    textFild.cornerRadius = 5;
+    textFild.font = [UIFont systemFontOfSize:18];
+    textFild.clearButtonMode = YES;
+    textFild.backgroundColor = [UIColor whiteColor];
+    
+}
+//提交注册
+- (void)regisBtn:(UIButton*)button
+{
+    
+    
+}
+
+
+//获取验证码
+- (void)getCode:(UIButton*)button
+{
+    if (_cellPhoneField.text.length == 0) {
+        [SVProgressHUD showErrorWithStatus:@"请输入电话号码"];
+        return;
+    }
+    
+    
+    
+}
+//监听textField
+- (void)tapCodeBtn:(UITextField*)textField
+{
+    BOOL isName = (textField.tag == 100&&textField.text.length>0);
+    BOOL isPhone = (textField.tag == 101&&textField.text.length>0);
+    if (isPhone||isName)
+    {
+        [_getCodeBtn setTintColor:[UIColor whiteColor]];
+        _getCodeBtn.enabled = YES;
+        _getCodeBtn.selected = YES;
+        return;
+    };
+    _getCodeBtn.enabled = NO;
+    _getCodeBtn.selected = NO;
+    [_getCodeBtn setTintColor:RGB(233, 233, 233)];
+    
+}
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self endEditing:YES];
+    
+}
+
+@end

@@ -1,0 +1,23 @@
+//
+//  LoginView.m
+//  iOS_demo
+//
+//  Created by yik on 16/3/18.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "APPLoginView.h"
+
+@implementation APPLoginView
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor yellowColor];
+    }
+    return self;
+
+}
+
+
+@end

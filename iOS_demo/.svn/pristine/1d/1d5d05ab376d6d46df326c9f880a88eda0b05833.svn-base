@@ -1,0 +1,41 @@
+//
+//  ChangePsswordVC.m
+//  iOS_demo
+//
+//  Created by happyinghu on 16/3/18.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "ChangePsswordVC.h"
+@interface ChangePsswordVC ()
+
+@end
+
+@implementation ChangePsswordVC
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.hidden = NO;
+}
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+//    [self.navigationController.navigationBar lt_reset];
+
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self setBarButton:0 image:[UIImage imageNamed:@"nav_back"] hilight:[UIImage imageNamed:@"nav_back"]];
+
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+@end

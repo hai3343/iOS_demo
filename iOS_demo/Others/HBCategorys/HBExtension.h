@@ -1,0 +1,32 @@
+//
+//  HBExtension.h
+//  TZBMain
+//
+//  Created by yik on 16/1/21.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#ifndef HBExtension_h
+#define HBExtension_h
+
+#define Screen_Width [UIScreen mainScreen].bounds.size.width
+#define Screen_Height [UIScreen mainScreen].bounds.size.height
+#define RGB(r,g,b) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:1]
+#define RGBA(r,g,b,a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:a]
+
+#import "NSData+Addition.h"
+//#import "NSFileManager+ Addition.h"
+#import "UIButton+HBExtension.h"
+#import "UIDevice+DeviceInfo.h"
+#import "UIImageView+HBExtension.h"
+#import "UILabel+HBExtension.h"
+#import "UIView+HBAnimation.h"
+#import "UIView+HBExtension.h"
+#import "Helper.h"
+#import "UIImage+HBExtension.h"
+#import "NSString+HBExtension.h"
+#import "UINavigationBar+Awesome.h"
+#import "UIView+MasonryConstraints.h"
+
+
+#endif /* HBExtension_h */

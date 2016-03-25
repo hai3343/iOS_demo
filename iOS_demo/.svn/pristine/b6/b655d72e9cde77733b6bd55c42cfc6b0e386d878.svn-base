@@ -1,0 +1,14 @@
+//
+//  HBScrollView.h
+//  TZBMain
+//
+//  Created by yik on 16/1/23.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface HBScrollView : UIView
+@property(nonatomic,strong)NSArray * imageName;
++ (id)scrollView;
+@end

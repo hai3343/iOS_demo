@@ -1,0 +1,57 @@
+//
+//  StroButtonViewController.m
+//  LYBFunctionalModule
+//
+//  Created by 金中国 on 16/3/15.
+//  Copyright © 2016年 金中国. All rights reserved.
+//
+
+#import "StroButtonViewController.h"
+
+@interface StroButtonViewController ()
+
+@end
+
+@implementation StroButtonViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    [self.storBut layoutView:@"哇咔咔"];
+    self.storBut.delegate = self;
+    // Do any additional setup after loading the view from its nib.
+}
+- (void)viewDidLayoutSubviews
+{
+    self.storBut.Y = 80;
+    self.backView.Y = 120;
+}
+- (IBAction)dissMiss:(UIButton *)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)returnButton:(StorButton *)stor andStor:(STOR_INTEGER)buttonStor{
+    if (buttonStor == STOR_INTEGER_UP) {
+        self.backView.backgroundColor = [UIColor redColor];
+    }
+    else if (buttonStor == STOR_INTEGER_DOWN){
+        self.backView.backgroundColor = [UIColor yellowColor];
+    }
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

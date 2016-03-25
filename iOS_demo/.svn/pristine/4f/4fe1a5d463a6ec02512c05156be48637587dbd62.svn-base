@@ -1,0 +1,81 @@
+//
+//  LoginVC.m
+//  iOS_demo
+//
+//  Created by yik on 16/3/18.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "LoginVC.h"
+#import "APPLoginView.h"
+#import "RegisView.h"
+#import "ChangePsswordVC.h"
+@interface LoginVC ()
+@property (nonatomic,strong) RegisView *regisView;
+@property (nonatomic,strong) APPLoginView *loginView;
+
+@end
+
+@implementation LoginVC
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.hidden = YES;
+    
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    self.loginView = [[APPLoginView alloc] initWithFrame:self.view.bounds];
+    self.loginView.backgroundColor = RGB(243, 243, 243);
+    self.regisView = [[RegisView alloc] initWithFrame:CGRectMake(0, 64, Screen_Width, Screen_Height - 64)];
+    self.regisView.hidden = YES;
+    self.regisView.backgroundColor = RGB(243, 243, 243);
+    [self.loginView addSubview:self.regisView];
+    [self.view addSubview:self.loginView];
+    //Block代码块
+    [self loginViewBlocks];
+    
+}
+- (void)loginViewBlocks
+{
+    __weak typeof(self) weak = self;
+    [self.loginView setLoginBlock:^{
+        weak.regisView.hidden = YES;
+        [weak.regisView endEditing:YES];
+        [UIView animationWithView:weak.regisView animationType:HBpush duration:1.0 direction:HBleft];
+    }];
+    
+    
+    [self.loginView setRegisterBlock:^{
+        weak.regisView.hidden = NO;
+        [weak.loginView endEditing:YES];
+        [UIView animationPush:weak.regisView duration:.5];
+    }];
+    
+    [self.loginView setLoginAppBlock:^{
+        [weak dismissViewControllerAnimated:YES completion:nil];
+        
+    }];
+    [self.loginView setForgetPassBlock:^{
+        ChangePsswordVC *vc = [[ChangePsswordVC alloc] init];
+        [weak.navigationController pushViewController:vc animated:YES];
+    }];
+    [self.loginView setWxloginBlock:^{
+        NSLog(@"微信登陆");
+        
+    }];
+    
+}
+
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+@end

@@ -1,0 +1,195 @@
+//
+//  ScreenLabView.m
+//  iOS_demo
+//
+//  Created by 金中国 on 16/3/16.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "ScreenLabView.h"
+
+@interface ScreenLabView()
+
+@property (nonatomic, strong)UIScrollView *lingSCroll;
+@property (nonatomic, strong)UIScrollView *priceScroll;
+
+@property (nonatomic, assign)BOOL          touchup;
+@end
+@implementation ScreenLabView
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+ */
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+    [self animationPush:self duration:1];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self layoutView];
+        self.backgroundColor = [UIColor whiteColor];
+    }
+    return self;
+}
+
+- (void)layoutView{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(100, 20, 30, 20);
+    button.backgroundColor = [UIColor redColor];
+    [button addTarget:self action:@selector(dissMiss) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:button];
+    
+    UIButton *lineBut = [UIButton buttonWithType:UIButtonTypeCustom];
+    lineBut.frame = CGRectMake(10, 100, Screen_Width - 20, 30);
+    lineBut.backgroundColor = [UIColor blueColor];
+    [self addSubview:lineBut];
+    [lineBut addTarget:self action:@selector(openAndFold:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.lingSCroll = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 140, Screen_Width, 100)];
+    self.lingSCroll.contentSize = CGSizeMake(0, 99);
+    self.lingSCroll.backgroundColor = [UIColor redColor];
+    [self addSubview:self.lingSCroll];
+    
+    
+    self.priceScroll = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 240, Screen_Width, 100)];
+    self.priceScroll.contentSize = CGSizeMake(0, 99);
+    self.priceScroll.backgroundColor = [UIColor yellowColor];
+    [self addSubview:self.priceScroll];
+    
+}
+- (void)openAndFold:(UIButton *)sender{
+    if (self.touchup == YES) {
+        self.touchup = NO;
+        //展开
+        
+        [UIView beginAnimations:@"myAnimation" context:nil];
+        [UIView setAnimationDelay:0.5];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        CGRect fram = self.lingSCroll.frame;
+        fram.size.height = 100;
+        self.lingSCroll.frame = fram;
+        
+        fram = self.priceScroll.frame;
+        fram.origin.y = 240;
+        self.priceScroll.frame = fram;
+        [UIView commitAnimations];
+    }
+    else{
+        self.touchup = YES;
+        //折叠
+        //http://www.cnblogs.com/hanjun/archive/2012/10/29/2745437.html 动画
+        [UIView beginAnimations:@"myAnimation" context:nil];
+        [UIView setAnimationDelay:0.5];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        CGRect fram = self.lingSCroll.frame;
+        fram.size.height = 0;
+        self.lingSCroll.frame = fram;
+        
+        fram = self.priceScroll.frame;
+        fram.origin.y = 140;
+        self.priceScroll.frame = fram;
+        [UIView commitAnimations];
+    }
+}
+
+- (void)dissMiss{
+    
+//    CATransition * animation = [CATransition animation];
+//    //    animation.delegate = self;
+//    animation.duration = 0.3;
+//    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//    animation.type = @"push";
+//    animation.subtype = kCATransitionFromLeft;
+//    [self.superview.layer addAnimation:animation forKey:@"animation"];
+//    [self removeFromSuperview];
+    
+    CATransition *animation = [CATransition animation];
+    
+    animation.duration = 1;
+    
+    animation.timingFunction = UIViewAnimationCurveEaseInOut;
+    
+    animation.fillMode = kCAFillModeForwards;
+    //各种动画效果
+    
+    /*
+     
+     KCATransitionFade;
+     
+     KCATransitionMoveIn;
+     
+     KCATransitionPush;
+     
+     KCATransitionReveal;
+     
+     */
+    
+    /*
+     
+     KCATransitionFromeRight;
+     
+     KCATransitionFromLeft;
+     
+     KCATransitionFormTop;
+     
+     kCATransitionFromButtons;
+     
+     */
+    animation.type = kCATransitionPush;
+    
+    animation.subtype = kCATransitionFromLeft;
+    
+    [self.superview.layer addAnimation:animation forKey:@"animationes"];
+        [self removeFromSuperview];
+
+    
+//    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(removeView) userInfo:nil repeats:NO];
+}
+//- (void)removeView{
+//    [self removeFromSuperview];
+//}
+- (void)animationPush:(UIView *)view duration:(CGFloat)duration
+{
+    CATransition *animation = [CATransition animation];
+    
+    animation.duration = duration;
+    
+    animation.timingFunction = UIViewAnimationCurveEaseInOut;
+    
+    animation.fillMode = kCAFillModeForwards;
+    //各种动画效果
+    
+    /*
+     
+     KCATransitionFade;
+     
+     KCATransitionMoveIn;
+     
+     KCATransitionPush;
+     
+     KCATransitionReveal;
+     
+     */
+    
+    /*
+     
+     KCATransitionFromeRight;
+     
+     KCATransitionFromLeft;
+     
+     KCATransitionFormTop;
+     
+     kCATransitionFromButtons;
+     
+     */
+    animation.type = kCATransitionPush;
+    
+    animation.subtype = kCATransitionFromRight;
+    
+    [view.layer addAnimation:animation forKey:@"animation"];
+}
+
+@end

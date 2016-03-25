@@ -1,0 +1,197 @@
+//
+//  MainHeardCell.m
+//  TZBMain
+//
+//  Created by yik on 16/1/22.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "MainHead.h"
+#import "ShopDetail.h"
+@interface MainHead()
+{
+    UIView *itemBG;
+}
+@end
+@implementation MainHead
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self createUI];
+    }
+    return self;
+}
+
+- (void)createUI
+{
+    //背景
+    self.shopbgimage = [UIImageView imageViewWithFrame:CGRectZero image:[UIImage imageNamed:@"美女"]];
+    [self addSubview:self.shopbgimage];
+    [self.shopbgimage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self);
+        make.width.mas_equalTo(self.width);
+        make.height.mas_equalTo(200);
+    }];
+    //头像
+    self.headimage = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.headimage setBackgroundImage:[UIImage imageNamed:@"logo"] forState:0];
+    [self.headimage addTarget:self action:@selector(headimageClick) forControlEvents:UIControlEventTouchDown];
+    [self addSubview:self.headimage];
+    [self.headimage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(60, 60));
+        make.bottom.mas_equalTo(self.shopbgimage).offset(-10);
+        make.left.mas_equalTo(self.shopbgimage).with.offset(10);
+        
+    }];
+    //店铺名
+    self.shopName = [UILabel lableWithTitle:@"  罗远冰的小店  " titleColor:[UIColor whiteColor] titleFont:[UIFont systemFontOfSize:16] textAlignment:NSTextAlignmentLeft];
+    [self.shopName setBackgroundColor:[UIColor orangeColor]];
+    [self addSubview:self.shopName];
+    [self.shopName mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.headimage.mas_right).with.offset(2);
+       CGFloat w =[HBHelper widthOfString:self.shopName.text font:self.shopName.font height:1000 maxWidth:180];
+        make.size.mas_equalTo(CGSizeMake(w, 25));
+        make.bottom.mas_equalTo(self.shopbgimage).offset(-15);
+    }];
+    //关注
+    self.attention = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.attention setBackgroundImage:[UIImage imageNamed:@"attention_n"] forState:0];
+    [self.attention setBackgroundImage:[UIImage imageNamed:@"attention_s"] forState:UIControlStateSelected];
+    [self.attention addTarget:self action:@selector(attention:) forControlEvents:UIControlEventTouchUpInside];
+    [self.attention setBackgroundColor:[UIColor orangeColor]];
+    [self addSubview:self.attention];
+    [self.attention mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.shopbgimage).offset(-10);
+        make.right.mas_equalTo(self.shopbgimage).offset(-10);
+        make.size.mas_equalTo(CGSizeMake(50, 50));
+    }];
+    //粉丝
+    self.fansView = [UIView new];
+    [self.fansView setBackgroundColor:RGB(180, 180, 180)];
+    [self addSubview:self.fansView];
+    
+    [self.fansView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.attention.mas_left).offset(-20);
+        make.size.mas_equalTo(self.attention);
+        make.bottom.mas_equalTo(self.attention);
+    }];
+    self.fansNumber = [UILabel lableWithTitle:@"99" titleColor:[UIColor whiteColor] titleFont:[UIFont systemFontOfSize:14] textAlignment:NSTextAlignmentCenter];
+    self.fansNumber.backgroundColor = [UIColor clearColor];
+    [self addSubview:self.fansNumber];
+    [self.fansNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.fansView).offset(+5);
+        make.width.mas_equalTo(self.fansView);
+        make.height.mas_equalTo(20);
+        make.centerX.mas_equalTo(self.fansView);
+    }];
+    self.fansLab = [UILabel lableWithTitle:@"粉丝" titleColor:[UIColor whiteColor] titleFont:[UIFont systemFontOfSize:14] textAlignment:NSTextAlignmentCenter];
+    [self addSubview:self.fansLab];
+    [self.fansLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.fansView).offset(-5);
+        make.size.mas_equalTo(self.fansNumber);
+        make.centerX.mas_equalTo(self.fansView);
+    }];
+    
+    /*******************typeItems*********************/
+    //背景
+    itemBG = [UIView new];
+    [itemBG setBackgroundColor:[UIColor whiteColor]];
+    [self addSubview:itemBG];
+    [itemBG mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.shopbgimage.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(self.width, 100));
+    }];
+    NSArray *arr = @[@"全部宝贝",@"最新产品",@"店铺促销"];
+    for (int i = 0; i < 3; i ++) {
+        //装button和lable的整体
+        UIView *itemView = [[UIView alloc] init];
+        [itemBG addSubview:itemView];
+        [itemView mas_makeConstraints:^(MASConstraintMaker *make) {
+            CGFloat with = (self.width / 3 - 60 )/ 2;
+            make.top.mas_equalTo(itemBG).offset(10);
+            make.size.mas_equalTo(CGSizeMake(60, 80));
+            make.left.mas_equalTo((self.width )/3*i +  with);
+
+        }];
+        UIButton* items = [UIButton buttonWithType:UIButtonTypeCustom];
+        [items setImage:[UIImage imageNamed:[NSString stringWithFormat:@"items-%d",i+1]] forState:0];
+        items.tag = 10 + i;
+        [items addTarget:self action:@selector(items:) forControlEvents:UIControlEventTouchUpInside];
+        [itemView addSubview:items];
+        items.size = CGSizeMake(60, 60);
+        
+        UILabel *itemsName = [UILabel lableWithTitle:arr[i] titleColor:[UIColor blackColor] titleFont:[UIFont systemFontOfSize:16] textAlignment:NSTextAlignmentCenter];
+        [itemView addSubview:itemsName];
+        itemsName.frame = CGRectMake(-5, 60, 70, 20);
+    }
+
+    self.Scrolladds = [[HBScrollView alloc]initWithFrame:CGRectZero array:@[@"1",@"2"]];
+    self.Scrolladds.placeImage = @"adds_4.jpg";
+    self.Scrolladds.pageControlIndicatorTintColor = [UIColor redColor];
+    self.Scrolladds.currentPageColor = [UIColor whiteColor];
+    self.Scrolladds.timeInterval = 2.0f;
+    [self addSubview:self.Scrolladds];
+    [self.Scrolladds setImageViewDidTapAtIndex:^(NSInteger index) {
+        printf("点击了index:%zd\n",index);
+        
+    }];
+    
+    [self.Scrolladds mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(itemBG.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(self.width, 200));
+    }];
+
+    
+    
+    
+    
+}
+- (void)setArrImg:(NSArray *)arrImg
+{
+    _arrImg = arrImg;
+    _Scrolladds.array = _arrImg;
+}
+//点击头像
+- (void)headimageClick
+{
+    if (self.shopDetailBlock) {
+        self.shopDetailBlock();
+    }
+    
+}
+
+//items点击
+- (void)items:(UIButton*)button
+{
+    NSInteger index = button.tag;
+    if (self.itemsBlock) {
+        self.itemsBlock(index);
+    }
+    
+}
+//收藏按钮
+- (void)attention:(UIButton*)button
+{
+    button.selected = !button.selected;
+    if (button.selected) {
+        self.fansNumber.text = @"100";
+    }else{
+        self.fansNumber.text = @"99";
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@end

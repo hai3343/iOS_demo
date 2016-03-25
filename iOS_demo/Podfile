@@ -1,0 +1,7 @@
+platform :ios, '7.0'
+pod 'Masonry'
+pod 'FMDB', '~> 2.6'
+pod 'SVProgressHUD', '~> 2.0-beta8'
+pod 'SDWebImage', '~> 3.7.5'
+pod 'AFNetworking', '~> 3.0.4'
+pod 'JSONKit-NoWarning', '~> 1.2'#解析json

@@ -1,0 +1,167 @@
+//
+//  HBScrollView.m
+//  TZBMain
+//
+//  Created by yik on 16/1/23.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "HBScrollView.h"
+#define scrollViewH 200
+@interface HBScrollView()<UIScrollViewDelegate>
+@property(nonatomic,weak)UIScrollView *scrollView;
+@property(nonatomic,weak)UIPageControl *pageControl;
+@property(nonatomic,strong)NSTimer *timer;
+@end
+
+
+@implementation HBScrollView
+
++ (id)scrollView
+{
+    return [[self alloc] init];
+
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        UIScrollView *scrollView = [[UIScrollView alloc]init];
+        [self addSubview:scrollView];
+        self.scrollView = scrollView;
+        
+        UIPageControl *pageControl = [[UIPageControl alloc] init];
+        [self addSubview:pageControl];
+        
+        self.pageControl = pageControl;
+    
+        scrollView.pagingEnabled = YES;
+        scrollView.delegate = self;
+        //图片总页数
+        pageControl.numberOfPages = _imageName.count;
+        pageControl.currentPage = 0;
+        pageControl.pageIndicatorTintColor = [UIColor grayColor];
+        pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+   
+    }
+
+    return self;
+}
+
+- (void)setImageName:(NSArray *)imageName
+{
+    _imageName = imageName;
+    NSInteger totalCount = imageName.count;
+    
+    CGFloat imageW = self.scrollView.frame.size.width;
+    for (int i = 0; i < totalCount; i++)
+    {
+        UIImageView * imageView = [[UIImageView alloc] init];
+        imageView.image = [UIImage imageNamed:imageName[i]];
+        
+        CGFloat imageH = self.scrollView.frame.size.height;
+        CGFloat imageX = i * imageW;
+        CGFloat imageY = 0;
+        
+        imageView.frame = CGRectMake(imageX, imageY, imageW, imageH);
+        [self.scrollView addSubview:imageView];
+    }
+ 
+
+    //2.设置ContentSize
+    self.scrollView.contentSize = CGSizeMake(totalCount * imageW, 0);
+    
+    //设置pageControl指示器,一共需要显示多少个点
+    self.pageControl.numberOfPages = imageName.count;
+    self.scrollView.backgroundColor = [UIColor grayColor];
+    
+    [self startTimer];
+
+
+
+
+}
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    //1.首先设置的一定是self自己的Frame 其余的子控件能够参考self的都参考self来写
+    CGFloat selfX = 0;
+    CGFloat selfY = 0;
+    CGFloat selfH = scrollViewH;
+    CGFloat selfW = newSuperview.frame.size.width;
+    
+    self.frame = CGRectMake(selfX, selfY, selfW, selfH);
+    self.backgroundColor = [UIColor whiteColor];
+    
+    //2.设置子控件的Frame值
+    self.scrollView.frame = self.bounds;
+    
+    CGFloat pageY = self.frame.size.height - 10;
+    CGFloat pageW = 100;
+    CGFloat pageX = (self.frame.size.width - pageW)/2;
+    CGFloat pageH = 0;
+    //设置pageControlFrame
+    self.pageControl.frame = CGRectMake(pageX, pageY, pageW, pageH);
+}
+
+
+#pragma mark 代理方法
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    //1.获得当前scrollView偏移量
+    CGPoint contentOffset = scrollView.contentOffset;
+    //2.根据偏移量除以scrollView宽度,得出当前滑动到了第几页
+    int page = (contentOffset.x + scrollView.frame.size.width * 0.5) / scrollView.frame.size.width;
+    //3.更改指示器的标示
+    self.pageControl.currentPage = page;
+}
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    //当timer调用了invalidate方法之后,就无法在次重新启动这个定时器
+    [self.timer invalidate];
+    //    self.timer
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    
+    [self startTimer];
+}
+
+#pragma mark 辅助逻辑方法
+- (void)startTimer
+{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+    
+    //把timer对象事件,交给主要的线程处理,就不会出现UI阻塞
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+}
+- (void)autoScroll
+{
+#pragma mark - 当前页数
+    
+    //1.计算出当前应该显示到第几页
+    NSInteger totalCount = _imageName.count;
+    //1
+    NSInteger page = self.pageControl.currentPage >= totalCount - 1 ? 0 : self.pageControl.currentPage + 1;
+    //2.计算出ContentOffSet的具体偏移量
+    CGFloat offSetX = page * self.scrollView.frame.size.width;
+    
+    
+    
+    
+    //3.更新scrollView的偏移量
+    //只要是contentOffset发生了改变,就会自动调用scrollViewDidScroll方法
+    self.scrollView.contentOffset = CGPointMake(offSetX, 0);
+    
+}
+
+
+
+
+
+
+
+
+
+@end

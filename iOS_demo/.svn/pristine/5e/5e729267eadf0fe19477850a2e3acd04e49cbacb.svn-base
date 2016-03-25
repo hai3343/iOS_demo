@@ -1,0 +1,22 @@
+//
+//  LogUserModel.h
+//  iOS_demo
+//
+//  Created by happyinghu on 16/3/20.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "LoginProtocol.h"
+@interface LogUserModel : NSObject<LoginProtocol>
+/**用户名**/
+@property (nonatomic,copy) NSString *name;
+/**密码**/
+@property (nonatomic,copy) NSString *passWorld;
+/**手机号**/
+@property (nonatomic,copy) NSString *phoneNo;
+/**验证码**/
+@property (nonatomic,copy) NSString *code;
+
+
+@end

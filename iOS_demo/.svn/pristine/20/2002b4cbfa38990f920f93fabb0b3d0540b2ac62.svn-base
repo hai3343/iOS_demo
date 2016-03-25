@@ -1,0 +1,147 @@
+//
+//  regisView.m
+//  iOS_demo
+//
+//  Created by yik on 16/3/18.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+#define labTextColor [UIColor grayColor]
+#define labFont [UIFont systemFontOfSize:18]
+#import "RegisView.h"
+@interface RegisView()
+@property (nonatomic,strong) UITextField *nameField;
+@property (nonatomic,strong) UITextField *cellPhone;
+@property (nonatomic,strong) UITextField *verficode;
+@property (nonatomic,strong) UITextField *passWord;
+@property (nonatomic,strong) UIButton *getCode;
+
+@end
+@implementation RegisView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self createUI];
+        
+    }
+    return self;
+}
+
+- (void)createUI
+{
+    CGFloat lableft = 10;
+    CGFloat labWith = 80;
+    CGFloat labHeight = 40;
+    CGFloat textleft = 100;
+    CGFloat textHeight = 45;
+    CGFloat textRight = -20;
+    CGFloat textTop = 20;
+    CGFloat textOfset = 10;
+    self.nameField = [[UITextField alloc]init];
+    [self textFild:self.nameField text:@"请输入店铺名称"];
+        [self addSubview:self.nameField];
+    [self.nameField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self).offset(textTop);
+        make.left.mas_equalTo(self).offset(textleft);
+        make.height.mas_equalTo(textHeight);
+        make.right.mas_equalTo(self).offset(textRight);
+    }];
+    self.cellPhone = [[UITextField alloc]init];
+    [self textFild:self.cellPhone text:@"请输入手机号"];
+    [self addSubview:self.cellPhone];
+    [self.cellPhone mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.nameField.mas_bottom).offset(textOfset);
+        make.left.mas_equalTo(self).offset(textleft);
+        make.height.mas_equalTo(textHeight);
+        make.right.mas_equalTo(self).offset(textRight);
+    }];
+    self.verficode = [[UITextField alloc]init];
+    [self textFild:self.verficode text:@"请输入验证码"];
+    [self addSubview:self.verficode];
+    [self.verficode mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.cellPhone.mas_bottom).offset(textOfset);
+        make.left.mas_equalTo(self).offset(textleft);
+        make.height.mas_equalTo(textHeight);
+        make.right.mas_equalTo(self).offset(textRight);
+    }];
+    self.passWord = [[UITextField alloc]init];
+    [self textFild:self.passWord text:@"请设置账号密码"];
+    [self addSubview:self.passWord];
+    [self.passWord mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.verficode.mas_bottom).offset(textOfset);
+        make.left.mas_equalTo(self).offset(textleft);
+        make.height.mas_equalTo(textHeight);
+        make.right.mas_equalTo(self).offset(textRight);
+    }];
+    
+    
+    self.getCode = [UIButton buttonWithType:UIButtonTypeCustom title:@"获取验证码" titleFont:18 titleColor:labTextColor backgroundColor:[UIColor whiteColor] target:self selector:@selector(getCode:)];
+    [_getCode setBackgroundImage:[UIImage imageNamed:@"nav_icon_bg"] forState:UIControlStateNormal];
+    [self addSubview:self.getCode];
+    [self.getCode mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+    }];
+    
+    
+    UILabel *shopName = [UILabel lableWithTitle:@"店铺名称:" titleColor:labTextColor titleFont:labFont textAlignment:NSTextAlignmentCenter];
+    [self addSubview:shopName];
+
+    [shopName mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self).offset(lableft);
+        make.centerY.mas_equalTo(self.nameField);
+        make.size.mas_equalTo(CGSizeMake(labWith, labHeight));
+    }];
+        UILabel *phone = [UILabel lableWithTitle:@"手机号:" titleColor:labTextColor titleFont:labFont textAlignment:NSTextAlignmentCenter];
+    [self addSubview:phone];
+    
+    [phone mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self).offset(lableft);
+        make.centerY.mas_equalTo(self.cellPhone);
+        make.size.mas_equalTo(CGSizeMake(labWith, labHeight));
+    }];
+    UILabel *code = [UILabel lableWithTitle:@"验证码:" titleColor:labTextColor titleFont:labFont textAlignment:NSTextAlignmentCenter];
+    [self addSubview:code];
+    
+    [code mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self).offset(lableft);
+        make.centerY.mas_equalTo(self.verficode);
+        make.size.mas_equalTo(CGSizeMake(labWith, labHeight));
+    }];
+    UILabel *passw = [UILabel lableWithTitle:@"店铺名称:" titleColor:labTextColor titleFont:labFont textAlignment:NSTextAlignmentCenter];
+    [self addSubview:passw];
+    
+    [passw mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self).offset(lableft);
+        make.centerY.mas_equalTo(self.passWord);
+        make.size.mas_equalTo(CGSizeMake(labWith, labHeight));
+    }];
+
+
+}
+
+- (void)textFild:(UITextField*)textFild text:(NSString*)text
+{
+    textFild.placeholder = text;
+    textFild.borderStyle = UITextBorderStyleRoundedRect;
+    textFild.cornerRadius = 5;
+    textFild.font = [UIFont systemFontOfSize:18];
+    textFild.clearButtonMode = YES;
+    textFild.backgroundColor = [UIColor whiteColor];
+
+}
+
+
+//获取验证码
+- (void)getCode:(UIButton*)button
+{
+
+
+}
+
+
+
+
+
+
+@end

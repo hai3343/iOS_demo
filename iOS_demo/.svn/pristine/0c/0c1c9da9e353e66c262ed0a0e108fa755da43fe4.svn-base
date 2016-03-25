@@ -1,0 +1,35 @@
+//
+//  HBHelper.h
+//  TZBMain
+//
+//  Created by yik on 16/1/23.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface HBHelper : NSObject
+/*****字符串文字的长度***
+*
+*
+*  @param string
+*  @param font
+*  @param height 默认高度 趋于无穷大
+*
+*  @return 字体长度
+*/
++(CGFloat)widthOfString:(NSString *)string font:(UIFont*)font height:(CGFloat)height maxWidth:(CGFloat)maxWidth;
+
+/**
+ *  ****字符串文字的高度*****
+ *
+ *  @param string
+ *  @param font
+ *  @param width 控件的所需的宽度
+ *
+ *  @return 字体高度
+ */
++(CGFloat)heightOfString:(NSString *)string font:(UIFont*)font width:(CGFloat)width maxHeight:(CGFloat)maxHeight;
+
+
+@end

@@ -1,0 +1,60 @@
+//
+//  LoginVC.m
+//  iOS_demo
+//
+//  Created by yik on 16/3/18.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "LoginVC.h"
+#import "APPLoginView.h"
+#import "RegisView.h"
+@interface LoginVC ()
+@property (nonatomic,strong) RegisView *regisView;
+@property (nonatomic,strong) APPLoginView *loginView;
+
+@end
+
+@implementation LoginVC
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    self.loginView = [[APPLoginView alloc] initWithFrame:CGRectMake(0, 20, Screen_Width, Screen_Height - 20)];
+    self.loginView.backgroundColor = [UIColor greenColor];
+    self.regisView = [[RegisView alloc] initWithFrame:CGRectMake(0, 44, Screen_Width, Screen_Height - 44)];
+    self.regisView.hidden = YES;
+    [self.loginView addSubview:self.regisView];
+    [self.view addSubview:self.loginView];
+    __weak LoginVC *weak = self;
+    [self.loginView setLoginBlock:^{
+        weak.regisView.hidden = YES;
+        [UIView animationWithView:weak.regisView animationType:HBpush duration:1.0 direction:HBleft];
+
+    }];
+    [self.loginView setRegisterBlock:^{
+        weak.regisView.hidden = NO;
+        [UIView animationPush:weak.regisView duration:.5];
+
+
+    }];
+
+}
+
+
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+//{
+//
+//    [self dismissViewControllerAnimated:YES completion:nil];
+//
+//
+//}
+
+@end

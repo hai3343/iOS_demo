@@ -1,0 +1,45 @@
+//
+//  LogUserModel.h
+//  iOS_demo
+//
+//  Created by happyinghu on 16/3/20.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+@interface LogUserModel : NSObject
+/**用户名**/
+@property (nonatomic,copy) NSString *name;
+/**密码**/
+@property (nonatomic,copy) NSString *passWorld;
+/**手机号**/
+@property (nonatomic,copy) NSString *phoneNo;
+/**验证码**/
+@property (nonatomic,copy) NSString *code;
+
+/**登陆操作**/
+- (void)loginAction:(id)view;
+/**店铺注册**/
+- (void)shopRegistAction:(id)view;
+/**会员注册**/
+- (void)memberAction:(id)view;
+/**重置密码操作**/
+- (void)changePassWord:(id)view;
+/***微信登录***/
+- (void)WXlogin:(id)view;
+/**店铺注册获取验证码**/
+- (void)shopCode:(id)view;
+/**会员注册获取验证码**/
+- (void)memberCode:(id)view;
+
+
+
+
+
+
+
+
+
+
+
+@end

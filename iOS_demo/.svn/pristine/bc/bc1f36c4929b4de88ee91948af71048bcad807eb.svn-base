@@ -1,0 +1,33 @@
+//
+//  ChangePsswordVC.m
+//  iOS_demo
+//
+//  Created by happyinghu on 16/3/18.
+//  Copyright © 2016年 jzg. All rights reserved.
+//
+
+#import "ChangePsswordVC.h"
+
+@interface ChangePsswordVC ()
+
+@end
+
+@implementation ChangePsswordVC
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor orangeColor]];
+}
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+@end
